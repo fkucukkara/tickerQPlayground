@@ -57,7 +57,43 @@ The project uses Entity Framework Core with SQL Server LocalDB. The database wil
 }
 ```
 
-### 4. Run the Application
+### 4. Entity Framework Migrations (Optional)
+
+While the application automatically handles database creation and migrations, you can also manage them manually using Entity Framework Core CLI commands.
+
+#### Prerequisites for Manual Migrations
+
+Ensure you have the EF Core tools installed globally:
+
+```bash
+dotnet tool install --global dotnet-ef
+```
+
+#### Common Migration Commands
+
+**Add a new migration:**
+```bash
+dotnet ef migrations add <MigrationName> --project TickerQPlayground
+```
+
+**Update the database to the latest migration:**
+```bash
+dotnet ef database update --project TickerQPlayground
+```
+
+#### Example Migration Workflow
+
+1. **Create a new migration after model changes:**
+   ```bash
+   dotnet ef migrations add UpdateTickerSchema --project TickerQPlayground
+   ```
+
+2. **Apply the migration to the database:**
+   ```bash
+   dotnet ef database update --project TickerQPlayground
+   ```
+
+### 5. Run the Application
 
 ```bash
 dotnet run --project TickerQPlayground
@@ -218,8 +254,17 @@ After exploring this playground, consider:
 - Try running `sqllocaldb info` to verify LocalDB installation
 
 **Migration Issues:**
-- Delete the `Migrations` folder and run `dotnet ef migrations add InitialCreate`
+- Delete the `Migrations` folder and run `dotnet ef migrations add InitialCreate --project TickerQPlayground`
 - Ensure the database is not in use by other applications
+- If you get "No migrations configuration type was found" error, make sure you're running commands from the solution root directory
+- For "Unable to create an object of type 'MyDbContext'" error, ensure the connection string is properly configured in `appsettings.json`
+- If migrations fail due to schema conflicts, try dropping the database first: `dotnet ef database drop --project TickerQPlayground`
+
+**Entity Framework CLI Issues:**
+- Install EF Core tools globally if commands are not recognized: `dotnet tool install --global dotnet-ef`
+- Update EF Core tools to the latest version: `dotnet tool update --global dotnet-ef`
+- Verify EF tools installation: `dotnet ef --version`
+- If you encounter permission issues, try running the command prompt as administrator
 
 **Dashboard Access Issues:**
 - Verify the application is running on the correct port
